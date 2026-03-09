@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>MultiTool-BD - Your Daily Tools, All in One Place</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -161,6 +161,7 @@
             background-color: var(--bg-gray);
             color: var(--text-dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -561,6 +562,8 @@
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .search-results h3 {
@@ -900,7 +903,7 @@
     </section>
     
     <!-- Document Tools Section -->
-    <section class="tools-section" style="background-color: #f1f5f9;">
+    <section class="tools-section" id="documents" style="background-color: #f1f5f9;">
         <div class="container">
             <div class="section-header">
                 <h2>📄 Document Tools</h2>
@@ -966,7 +969,7 @@
     </section>
     
     <!-- Calculator Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section" id="calculators">
         <div class="container">
             <div class="section-header">
                 <h2>🧮 Calculator Tools</h2>
@@ -1032,7 +1035,7 @@
     </section>
     
     <!-- Text Tools Section -->
-    <section class="tools-section" style="background-color: #f1f5f9;">
+    <section class="tools-section" id="text-tools" style="background-color: #f1f5f9;">
         <div class="container">
             <div class="section-header">
                 <h2>🔤 Text Tools</h2>
@@ -1098,7 +1101,7 @@
     </section>
 
     <!-- Web/Developer Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section" id="dev-tools">
         <div class="container">
             <div class="section-header">
                 <h2>🌐 Web/Developer Tools</h2>
@@ -1164,7 +1167,7 @@
     </section>
 
     <!-- Color Tools Section -->
-    <section class="tools-section" style="background-color: #f1f5f9;">
+    <section class="tools-section" id="color-tools" style="background-color: #f1f5f9;">
         <div class="container">
             <div class="section-header">
                 <h2>🎨 Color Tools</h2>
@@ -1230,7 +1233,7 @@
     </section>
 
     <!-- SEO & Marketing Tools Section -->
-    <section class="tools-section" style="background-color: #f1f5f9;">
+    <section class="tools-section" id="seo-tools" style="background-color: #f1f5f9;">
         <div class="container">
             <div class="section-header">
                 <h2>🌍 SEO & Marketing Tools</h2>
@@ -1269,7 +1272,7 @@
     </section>
 
     <!-- Utility Tools Section -->
-    <section class="tools-section">
+    <section class="tools-section" id="utility-tools">
         <div class="container">
             <div class="section-header">
                 <h2>🛠️ Utility Tools</h2>

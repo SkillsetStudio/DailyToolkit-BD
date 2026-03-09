@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Passport Photo Maker Tool</title>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"/>
+
 <style>
 
 body{
@@ -38,6 +40,11 @@ border:1px solid #ccc;
 border-radius:5px;
 }
 
+#preview{
+max-width:100%;
+margin-top:1rem;
+}
+
 canvas{
 max-width:100%;
 margin-top:1rem;
@@ -65,12 +72,10 @@ text-align:center;
 }
 
 @media (max-width:600px){
-
 .container{
 margin:1rem;
 padding:1rem;
 }
-
 }
 
 </style>
@@ -85,21 +90,19 @@ padding:1rem;
 <input type="file" id="upload" accept="image/*">
 
 <select id="passportType">
-
 <option value="us">US Passport (2x2 inch)</option>
 <option value="eu">UK / EU / India (35x45 mm)</option>
 <option value="china">China (33x48 mm)</option>
 <option value="square">Custom Square</option>
-
 </select>
 
 <select id="format">
-
 <option value="image/png">PNG</option>
 <option value="image/jpeg">JPG</option>
 <option value="image/webp">WebP</option>
-
 </select>
+
+<img id="preview">
 
 <button onclick="makePassport()">Generate Passport Photo</button>
 
@@ -109,9 +112,12 @@ padding:1rem;
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
 <script>
 
-let originalImage = new Image()
+let cropper
+const preview=document.getElementById("preview")
 
 document.getElementById('upload').addEventListener('change',function(event){
 
@@ -123,7 +129,7 @@ const reader = new FileReader()
 
 reader.onload=function(e){
 
-originalImage.src = e.target.result
+preview.src = e.target.result
 
 }
 
@@ -131,25 +137,26 @@ reader.readAsDataURL(file)
 
 })
 
+preview.onload=function(){
+
+if(cropper) cropper.destroy()
+
+cropper=new Cropper(preview,{
+viewMode:1,
+autoCropArea:0.8,
+responsive:true
+})
+
+}
+
 function getSize(){
 
 const type=document.getElementById("passportType").value
 
-if(type==="us"){
-return {w:600,h:600}
-}
-
-if(type==="eu"){
-return {w:413,h:531}
-}
-
-if(type==="china"){
-return {w:390,h:567}
-}
-
-if(type==="square"){
-return {w:600,h:600}
-}
+if(type==="us") return {w:600,h:600}
+if(type==="eu") return {w:413,h:531}
+if(type==="china") return {w:390,h:567}
+if(type==="square") return {w:600,h:600}
 
 }
 
@@ -163,21 +170,12 @@ const size=getSize()
 canvas.width=size.w
 canvas.height=size.h
 
-const minSide=Math.min(originalImage.width,originalImage.height)
+const cropped=cropper.getCroppedCanvas({
+width:size.w,
+height:size.h
+})
 
-const sx=(originalImage.width-minSide)/2
-const sy=(originalImage.height-minSide)/2
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-ctx.drawImage(
-originalImage,
-sx,sy,
-minSide,minSide,
-0,0,
-canvas.width,
-canvas.height
-)
+ctx.drawImage(cropped,0,0)
 
 const format=document.getElementById("format").value
 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passport Photo Maker Tool</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+background-color:#e6f0ff;
+color:#003366;
+margin:0;
+padding:0;
+}
+
+.container{
+max-width:600px;
+margin:2rem auto;
+padding:1rem;
+background-color:#ffffff;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+color:#007bff;
+}
+
+input,select{
+display:block;
+width:100%;
+margin:1rem 0;
+padding:0.5rem;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+canvas{
+max-width:100%;
+margin-top:1rem;
+}
+
+button{
+background-color:#007bff;
+color:white;
+padding:0.7rem;
+border:none;
+border-radius:5px;
+cursor:pointer;
+width:100%;
+margin-top:1rem;
+}
+
+button:hover{
+background-color:#0056b3;
+}
+
+#downloadLink{
+display:none;
+margin-top:1rem;
+text-align:center;
+}
+
+@media (max-width:600px){
+
+.container{
+margin:1rem;
+padding:1rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Passport Photo Maker</h1>
+
+<input type="file" id="upload" accept="image/*">
+
+<select id="passportType">
+
+<option value="us">US Passport (2x2 inch)</option>
+<option value="eu">UK / EU / India (35x45 mm)</option>
+<option value="china">China (33x48 mm)</option>
+<option value="square">Custom Square</option>
+
+</select>
+
+<select id="format">
+
+<option value="image/png">PNG</option>
+<option value="image/jpeg">JPG</option>
+<option value="image/webp">WebP</option>
+
+</select>
+
+<button onclick="makePassport()">Generate Passport Photo</button>
+
+<canvas id="canvas"></canvas>
+
+<a id="downloadLink" download="passport-photo.png">Download Passport Photo</a>
+
+</div>
+
+<script>
+
+let originalImage = new Image()
+
+document.getElementById('upload').addEventListener('change',function(event){
+
+const file = event.target.files[0]
+
+if(!file) return
+
+const reader = new FileReader()
+
+reader.onload=function(e){
+
+originalImage.src = e.target.result
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+function getSize(){
+
+const type=document.getElementById("passportType").value
+
+if(type==="us"){
+return {w:600,h:600}
+}
+
+if(type==="eu"){
+return {w:413,h:531}
+}
+
+if(type==="china"){
+return {w:390,h:567}
+}
+
+if(type==="square"){
+return {w:600,h:600}
+}
+
+}
+
+function makePassport(){
+
+const canvas=document.getElementById("canvas")
+const ctx=canvas.getContext("2d")
+
+const size=getSize()
+
+canvas.width=size.w
+canvas.height=size.h
+
+const minSide=Math.min(originalImage.width,originalImage.height)
+
+const sx=(originalImage.width-minSide)/2
+const sy=(originalImage.height-minSide)/2
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.drawImage(
+originalImage,
+sx,sy,
+minSide,minSide,
+0,0,
+canvas.width,
+canvas.height
+)
+
+const format=document.getElementById("format").value
+
+const link=document.getElementById("downloadLink")
+
+link.href=canvas.toDataURL(format)
+
+link.style.display="block"
+
+link.textContent="Download Passport Photo"
+
+}
+
+</script>
+
+</body>
+</html>

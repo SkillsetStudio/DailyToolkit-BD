@@ -190,6 +190,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative; /* Centering support */
         }
         
         .logo {
@@ -197,6 +198,7 @@
             font-weight: 700;
             color: var(--primary-blue);
             text-decoration: none;
+            z-index: 10;
         }
         
         .logo span {
@@ -210,6 +212,13 @@
         gap:20px;
         }
         
+        nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
         nav ul {
             display: flex;
             list-style: none;
@@ -246,6 +255,7 @@
             font-size: 24px;
             color: var(--primary-blue);
             cursor: pointer;
+            z-index: 10;
         }
         
         /* Hero Section */
@@ -569,12 +579,25 @@
         
         @media (max-width: 768px) {
             .header-container {
-                flex-direction: column;
-                gap: 15px;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 20px;
             }
             
+            nav {
+                display: none;
+                position: static;
+                transform: none;
+                width: 100%;
+                background: white;
+                box-shadow: var(--shadow);
+                padding: 20px;
+            }
+
             nav ul {
+                flex-direction: column;
                 gap: 15px;
+                align-items: center;
             }
             
             .hero {
@@ -600,26 +623,13 @@
             .section-header h2 {
                 font-size: 1.5rem;
             }
-        }
-        
-        @media (max-width: 576px) {
-            .header-container {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            
-            nav {
-                display: none;
-            }
-            
-            .contact-email {
-                display: none;
-            }
-            
+
             .mobile-menu-btn {
                 display: block;
             }
-            
+        }
+        
+        @media (max-width: 576px) {
             .hero h1 {
                 font-size: 1.8rem;
             }
@@ -649,92 +659,85 @@
     </style>
 </head>
 <body>
+    <!-- Donate Button & Overlay (Moved outside nav for better control) -->
+    <button class="donate-fab" onclick="toggleDonate(true)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      Donate
+    </button>
+
+    <div class="donate-overlay" id="donateOverlay" onclick="handleOverlayClick(event)">
+      <div class="donate-modal">
+        <div class="donate-header">
+          <div>
+            <h2>Support Us <span style="color: #f43f5e;">❤️</span></h2>
+            <p>Your support keeps MultiTool-BD alive.</p>
+          </div>
+          <button class="close-x" onclick="toggleDonate(false)">&times;</button>
+        </div>
+
+        <div class="donate-content">
+          <div class="method-item">
+            <div class="method-label">
+              <span class="icon-box btc-bg">₿</span>
+              <h3>Bitcoin</h3>
+            </div>
+            <div class="address-container">
+              <div class="address-text" id="btcAddr">1DBphcN4MtkJVabBqu3kG4JczsMAiU8hPc</div>
+              <button class="copy-btn" onclick="copyText('btcAddr', this)">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="method-item">
+            <div class="method-label">
+              <span class="icon-box usdt-bg">₮</span>
+              <h3>USDT (TRC20)</h3>
+            </div>
+            <div class="address-container">
+              <div class="address-text" id="usdtAddr">TKNjbt8XYER5GaeGw8E6z8MPgLBcGY5Qjo</div>
+              <button class="copy-btn" onclick="copyText('usdtAddr', this)">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="method-item">
+            <div class="method-label">
+              <span class="icon-box merchant-bg">M</span>
+              <h3>bKash Merchant (Payment)</h3>
+            </div>
+            <div class="bkash-card merchant-border">
+              <p class="bkash-num merchant-text">01766020093</p>
+              <p class="bkash-sub">Merchant Account • Use "Make Payment"</p>
+              <div class="merchant-details">
+                <span>Ref: <b>Donation</b></span>
+                <span>Counter: <b>1</b></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="method-item">
+            <div class="method-label">
+              <span class="icon-box binance-bg">B</span>
+              <h3>Binance Pay</h3>
+            </div>
+            <a href="https://pay.binance.com/en/pay?id=778962944" target="_blank" class="binance-link">Pay with Binance</a>
+          </div>
+        </div>
+
+        <div class="donate-footer">
+          <button onclick="toggleDonate(false)">Maybe later</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container header-container">
             <a href="#" class="logo">MultiTool-<span>BD</span></a>
             
-            <nav>
-                
-<!-- Donate Button -->
-<button class="donate-fab" onclick="toggleDonate(true)">
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-  Donate
-</button>
-<!-- Donation Popup Overlay -->
-<div class="donate-overlay" id="donateOverlay" onclick="handleOverlayClick(event)">
-  <div class="donate-modal">
-    <!-- Header -->
-    <div class="donate-header">
-      <div>
-        <h2>Support Us <span style="color: #f43f5e;">❤️</span></h2>
-        <p>Your support keeps MultiTool-BD alive.</p>
-      </div>
-      <button class="close-x" onclick="toggleDonate(false)">&times;</button>
-    </div>
-
-    <!-- Scrollable Content -->
-    <div class="donate-content">
-      <!-- Bitcoin -->
-      <div class="method-item">
-        <div class="method-label">
-          <span class="icon-box btc-bg">₿</span>
-          <h3>Bitcoin</h3>
-        </div>
-        <div class="address-container">
-          <div class="address-text" id="btcAddr">1DBphcN4MtkJVabBqu3kG4JczsMAiU8hPc</div>
-          <button class="copy-btn" onclick="copyText('btcAddr', this)">
-            <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- USDT -->
-      <div class="method-item">
-        <div class="method-label">
-          <span class="icon-box usdt-bg">₮</span>
-          <h3>USDT (TRC20)</h3>
-        </div>
-        <div class="address-container">
-          <div class="address-text" id="usdtAddr">TKNjbt8XYER5GaeGw8E6z8MPgLBcGY5Qjo</div>
-          <button class="copy-btn" onclick="copyText('usdtAddr', this)">
-            <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-        </div>
-      </div>
-
- <!-- bKash Merchant (NEW) -->
-      <div class="method-item">
-        <div class="method-label">
-          <span class="icon-box merchant-bg">M</span>
-          <h3>bKash Merchant (Payment)</h3>
-        </div>
-        <div class="bkash-card merchant-border">
-          <p class="bkash-num merchant-text">01766020093</p>
-          <p class="bkash-sub">Merchant Account • Use "Make Payment"</p>
-          <div class="merchant-details">
-            <span>Ref: <b>Donation</b></span>
-            <span>Counter: <b>1</b></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Binance -->
-      <div class="method-item">
-        <div class="method-label">
-          <span class="icon-box binance-bg">B</span>
-          <h3>Binance Pay</h3>
-        </div>
-        <a href="https://pay.binance.com/en/pay?id=778962944" target="_blank" class="binance-link">Pay with Binance</a>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="donate-footer">
-      <button onclick="toggleDonate(false)">Maybe later</button>
-    </div>
-  </div>
-</div>
+            <nav id="mainNav">
                 <ul class="menu">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#tools">Tools</a></li>
@@ -1304,14 +1307,12 @@
                     <p>Simplifying your digital life with powerful, easy-to-use tools for all your needs.</p>
                 </div>
                 
-<!-- Footer Contact Form-->
-                
                 <style>
-.footer-contact{
-max-width:400px;
-margin:auto;
-font-family:Arial;
-}
+            .footer-contact{
+              max-width:400px;
+              margin:auto;
+              font-family:Arial;
+            }
 
 .footer-contact h3{
 margin-bottom:10px;
@@ -1381,8 +1382,8 @@ background:#007fff;
     <script>
         // Mobile menu toggle functionality
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            const nav = document.querySelector('nav');
-            nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+            const nav = document.getElementById('mainNav');
+            nav.style.display = (nav.style.display === 'block' || nav.style.display === 'flex') ? 'none' : 'block';
         });
         
         // Search functionality
@@ -1456,37 +1457,29 @@ background:#007fff;
                 document.getElementById('searchResults').style.display = 'none';
             }
         });
+
+        function toggleDonate(show) {
+          const overlay = document.getElementById('donateOverlay');
+          overlay.style.display = show ? 'flex' : 'none';
+          // Prevent body scroll when open
+          document.body.style.overflow = show ? 'hidden' : 'auto';
+        }
+
+        function handleOverlayClick(e) {
+          if (e.target.id === 'donateOverlay') toggleDonate(false);
+        }
+
+        async function copyText(id, btn) {
+          const text = document.getElementById(id).innerText;
+          try {
+            await navigator.clipboard.writeText(text);
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span style="color: #10b981">✓</span>';
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+          }
+        }
     </script>
-
-    
-<script>
-function toggleDonate(show) {
-  const overlay = document.getElementById('donateOverlay');
-  overlay.style.display = show ? 'flex' : 'none';
-  // Prevent body scroll when open
-  document.body.style.overflow = show ? 'hidden' : 'auto';
-}
-
-function handleOverlayClick(e) {
-  if (e.target.id === 'donateOverlay') toggleDonate(false);
-}
-
-async function copyText(id, btn) {
-  const text = document.getElementById(id).innerText;
-  try {
-    await navigator.clipboard.writeText(text);
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<span style="color: #10b981">✓</span>';
-    setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-  }
-}
- </script>  
-
-    
 </body>
 </html>
-
-  
-  

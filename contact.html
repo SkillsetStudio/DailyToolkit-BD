@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - MultiTool-BD</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  margin: 0;
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+/* Card */
+.contact-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+p {
+  text-align: center;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Form */
+form input,
+form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+form textarea {
+  height: 120px;
+  resize: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+/* Info Box */
+.contact-info {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.contact-info a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+  <div class="contact-box">
+
+    <h1>Contact Us</h1>
+    <p>Have questions, feedback, or suggestions? We'd love to hear from you!</p>
+
+    <!-- Contact Form -->
+    <form action="https://formspree.io/f/xaqpnpeq" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message..." required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <p>Email: <a href="mailto:rayhanuddinkhan1990@gmail.com">rayhanuddinkhan1990@gmail.com</a></p>
+      <p>Website: <a href="https://multitoolbd.site" target="_blank">multitoolbd.site</a></p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
